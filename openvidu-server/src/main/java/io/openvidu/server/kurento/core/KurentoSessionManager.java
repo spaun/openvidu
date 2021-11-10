@@ -68,6 +68,7 @@ import io.openvidu.server.core.EndReason;
 import io.openvidu.server.core.FinalUser;
 import io.openvidu.server.core.IdentifierPrefixes;
 import io.openvidu.server.core.MediaOptions;
+import io.openvidu.server.core.MediaServer;
 import io.openvidu.server.core.Participant;
 import io.openvidu.server.core.Session;
 import io.openvidu.server.core.SessionManager;
@@ -384,6 +385,22 @@ public class KurentoSessionManager extends SessionManager {
 
 		CDR.log(new WebrtcDebugEvent(participant, streamId, WebrtcDebugEventIssuer.client,
 				WebrtcDebugEventOperation.publish, WebrtcDebugEventType.sdpOffer, kurentoOptions.sdpOffer));
+
+		// Set appropriate value for the ForcedVideoCodec feature.
+		if (forcedVideoCodec == VideoCodec.MEDIA_SERVER_PREFERRED) {
+			final MediaServer mediaServer = openviduConfig.getMediaServer();
+			switch (mediaServer) {
+				case mediasoup:
+					forcedVideoCodec = VideoCodec.NONE;
+					break;
+				case kurento:
+				default:
+					forcedVideoCodec = VideoCodec.VP8;
+					break;
+			}
+
+			log.info("Media Server: {}, selected ForcedVideoCodec value: {}", mediaServer, forcedVideoCodec);
+		}
 
 		// Modify sdp if forced codec is defined
 		if (forcedVideoCodec != VideoCodec.NONE && !participant.isIpcam()) {
