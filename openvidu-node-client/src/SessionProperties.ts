@@ -73,7 +73,7 @@ export interface SessionProperties {
      * and exception will occur. If forcedVideoCodec is set to [[VideoCodec.NONE]], no codec will be forced.
      *
      * If defined here, this parameter has prevalence over OPENVIDU_STREAMS_FORCED_VIDEO_CODEC.
-     * OPENVIDU_STREAMS_FORCED_VIDEO_CODEC default is [[VideoCodec.VP8]]
+     * OPENVIDU_STREAMS_FORCED_VIDEO_CODEC default is [[VideoCodec.MEDIA_SERVER_PREFERRED]]
      */
     forcedVideoCodec?: VideoCodec;
 
@@ -85,5 +85,4 @@ export interface SessionProperties {
      * OPENVIDU_STREAMS_ALLOW_TRANSCODING default is 'false'
      */
     allowTranscoding?: boolean;
-
 }
